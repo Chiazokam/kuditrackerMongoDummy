@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
     </head>
     <body id="defined-body">
+      {% from "includes/_formhelpers.html" import render_field %}
         <div class="ui static inverted menu">
           <div class="ui container">
             <div class="header item"><i class="calculator icon"></i>KudiTracker</div>
@@ -15,6 +16,36 @@
           </div>
         </div>
         <h1>Hello, Justin!</h1>
+
+        <div id="defined-content">
+  <div class="ui main text container segment">
+    <div class="ui huge header" id="boldName" name ="boldName"> KudiTracker </div>
+
+    <form class="ui form" action="/" method="POST">
+        <div class="field" id="dateField">
+          <span id="dateError"><i>Wrong date input</i></span>
+          {{render_field(form.expense_date)}}
+        </div>
+
+        <div class="field">
+          {{render_field(form.expense_descr)}}
+        </div>
+
+        <div class="field">
+          <span id="amountError"><i>Please put an integer without commas and fullstops</i></span>
+          {{render_field(form.expense_amt)}}
+        </div>
+
+        <div class="field">
+          <span id="categoryError"><i>Please put in the right category</i></span>
+          {{render_field(form.expense_cat)}}
+        </div>
+
+        <button class="ui secondary button" type="submit" onclick="return expenseNotification()">Submit</button>
+    </form>
+  </div>
+</div>
+
       <div id="defined-footer">
         <div class="ui inverted footer segment">
           <div class="ui container">
