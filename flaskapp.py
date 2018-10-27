@@ -8,9 +8,10 @@ app = Flask(__name__)
 
 def dbConnection():
     """Function to connect to the DB"""
-    db_conn = mariadb.connect(user='root',
-                              password='root',
-                              database='kuditracker')
+    db_conn = mariadb.connect(user='mt3alqgu9u1xsctb',
+                              password='trhx9bgb1i1au1sq',
+                              database='a2b7jptfulz8wqhr',
+                              port = 3306)
     cursor = db_conn.cursor()
 
 #Create function to change date to a date object
