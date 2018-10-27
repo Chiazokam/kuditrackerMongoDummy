@@ -1,0 +1,30 @@
+#defined-body{
+  background-color: #ecf0f1;
+}
+
+.defined-item:hover{
+  background-color: #b71540;
+}
+
+.defined-item:active{
+  background-color: #b71540;
+}
+
+#defined-descr{
+  text-align: center;
+}
+
+#defined-content{
+  padding-top: 5%;
+  height: 85%;
+  overflow: scroll;
+}
+
+#dateError, #amountError, #categoryError{
+  color: #e66767;
+  visibility: hidden;
+}
+#footer-text{
+  margin-bottom: 0;
+  padding-left: 36%;
+}
