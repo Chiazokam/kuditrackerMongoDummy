@@ -1,18 +1,11 @@
 from flask import Flask, render_template, url_for, redirect, session, request, jsonify
 from wtforms import Form, validators, StringField, TextAreaField, DateField, IntegerField, SelectField, SubmitField
-import mysql.connector as mariadb
 from datetime import datetime
-import pymysql  #Downloaded and imported
+import pymongo
+from pymongo import MongoClient # Database connector
 
 app = Flask(__name__)
 
-def dbConnection():
-    """Function to connect to the DB"""
-    db_conn = mariadb.connect(user='mt3alqgu9u1xsctb',
-                              password='trhx9bgb1i1au1sq',
-                              database='a2b7jptfulz8wqhr',
-                              port = 3306)
-    cursor = db_conn.cursor()
 
 #Create function to change date to a date object
 def date_format(date_string):
@@ -29,32 +22,47 @@ class ExpenseForm(Form):
     expense_amt = IntegerField('Amount', [validators.DataRequired()])
     expense_cat = StringField('Category: business Or personal', [validators.DataRequired()])
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = ExpenseForm(request.form)
 
     if request.method == 'POST':
-        expense_date = date_format(request.form['expense_date'])
+        expense_date = request.form['expense_date']
         #Escape characters that may cause an error when inserted into the db e.g, apostrophe
-        expense_descr =  pymysql.escape_string(request.form['expense_descr'])
-        expense_amt = pymysql.escape_string(request.form['expense_amt'])
+        expense_descr = request.form['expense_descr']
+        expense_amt = request.form['expense_amt']
         expense_cat = request.form['expense_cat']
 
-        #Connect to mariaDB
-        db_conn = mariadb.connect(user='root',
-                                      password='root',
-                                      database='kuditracker')
-        cursor = db_conn.cursor()
-        #Insert data into the db
-        query = "INSERT INTO expenses (ExpenseDate, Description, Amount, Category) VALUES ('{}', '{}', '{}', '{}')".format(expense_date, expense_descr, expense_amt, expense_cat)
-        cursor.execute(query)
-        db_conn.commit()
-        #Close connection
-        cursor.close()
+        client = MongoClient('localhost', 27017)    #Configure the connection to the database
+        db = client.kuditracker    #Select the database
+
+        expense = {
+           "Date": "06/08/18",
+           "Description": expense_descr,
+           "Amount(NGN)": expense_amt,
+           "Category": expense_cat
+           }
+        db.expenses.insert_one(expense)
+        print(expense)
+
         return redirect(url_for("index"))
     return render_template('hello.html', form=form)
 
+@app.route('/business')
+def business():
+    client = MongoClient('localhost', 27017)    #Configure the connection to the database
+    db = client.kuditracker    #Select the database
+    queryRows = db.expenses.find({"Category": "Business"}, {"_id":1, "Date":1, "Description":1 }).pretty()
+    for eachRow in queryRows:
+        print(eachRow['Description'])
+    return render_template("business.html")
+
+@app.route('/personal')
+def personal():
+    client = MongoClient('localhost', 27017)    #Configure the connection to the database
+    db = client.kuditracker    #Select the database
+
+    return render_template("personal.html")
 #=========================================
 if __name__ == '__main__':
     app.run(debug=True)

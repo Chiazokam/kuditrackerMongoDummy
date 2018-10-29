@@ -15,34 +15,38 @@
             <div class="defined-item"><a href="/personal" class="item">Personal</a></div>
           </div>
         </div>
+
         <div id="defined-content">
-  <div class="ui main text container segment">
-    <div class="ui huge header" id="boldName" name ="boldName"> KudiTracker </div>
-
-    <form class="ui form" action="/" method="POST">
-        <div class="field" id="dateField">
-          <span id="dateError"><i>Wrong date input</i></span>
-          {{render_field(form.expense_date)}}
-        </div>
-
-        <div class="field">
-          {{render_field(form.expense_descr)}}
-        </div>
-
-        <div class="field">
-          <span id="amountError"><i>Please put an integer without commas and fullstops</i></span>
-          {{render_field(form.expense_amt)}}
-        </div>
-
-        <div class="field">
-          <span id="categoryError"><i>Please put in the right category</i></span>
-          {{render_field(form.expense_cat)}}
-        </div>
-
-        <button class="ui secondary button" type="submit" onclick="return expenseNotification()">Submit</button>
-    </form>
+<div class="ui main text container segment" id="defined-form-container">
+  <div id="defined-form">
+    <h1 class="ui horizontal divider header">
+      Personal
+    </h1>
+      <p id="defined-descr">All Personal Expenses</p>
+        <table class="ui celled table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Expenses</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td data-label="Date">{{ row[1] }}</td>
+              <td data-label="Expenses">{{ row[2] }}</td>
+              <td><a href="/business/{{row[0]}}/edit"><i class="edit icon"></i></a></td>
+              <td><a href="/business/{{row[0]}}"><i class="cut icon"></i></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
   </div>
 </div>
+</div>
+
 
       <div id="defined-footer">
         <div class="ui inverted footer segment">
