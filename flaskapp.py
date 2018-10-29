@@ -33,7 +33,7 @@ def index():
         expense_amt = request.form['expense_amt']
         expense_cat = request.form['expense_cat']
 
-        client = MongoClient('localhost', 27017)    #Configure the connection to the database
+        client = MongoClient(mongodb://chiazokam:NXdGbwes76bwruB@ds143953.mlab.com:43953/kuditracker)    #Configure the connection to the database
         db = client.kuditracker    #Select the database
 
         expense = {
