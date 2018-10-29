@@ -3,6 +3,7 @@ from wtforms import Form, validators, StringField, TextAreaField, DateField, Int
 from datetime import datetime
 import pymongo
 from pymongo import MongoClient # Database connector
+import json
 
 app = Flask(__name__)
 
@@ -33,8 +34,8 @@ def index():
         expense_amt = request.form['expense_amt']
         expense_cat = request.form['expense_cat']
 
-        client = MongoClient(mongodb://chiazokam:NXdGbwes76bwruB@ds143953.mlab.com:43953/kuditracker)    #Configure the connection to the database
-        db = client.kuditracker    #Select the database
+        client = MongoClient('localhost', 27017)    #Configure the connection to the database
+        db = client.kudidummyDB    #Select the database
 
         expense = {
            "Date": "06/08/18",
@@ -51,16 +52,16 @@ def index():
 @app.route('/business')
 def business():
     client = MongoClient('localhost', 27017)    #Configure the connection to the database
-    db = client.kuditracker    #Select the database
-    queryRows = db.expenses.find({"Category": "Business"}, {"_id":1, "Date":1, "Description":1 }).pretty()
-    for eachRow in queryRows:
-        print(eachRow['Description'])
-    return render_template("business.html")
+    db = client.kudidummyDB    #Select the database
+    cur = db.expenses.find({"Category": "business"})
+    for doc in cur:
+        print(doc)
+    return render_template("business.html", rows=cur)
 
 @app.route('/personal')
 def personal():
     client = MongoClient('localhost', 27017)    #Configure the connection to the database
-    db = client.kuditracker    #Select the database
+    db = client.kudidummyDB    #Select the database
 
     return render_template("personal.html")
 #=========================================
